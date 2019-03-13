@@ -30,16 +30,10 @@ def correctSudoku(sudoku):
     return True
 
 with open('sudoku_solutions.txt', 'r') as inputFile:
-    lines = [line.rstrip() for line in inputFile]
-    
-sudokus = []
-for line in lines:
-    sudokus.append(line.split(": ")[1])
+    lines = [line.rstrip().replace("sudoku: ", "") for line in inputFile]
 
-numCorrect = 0
-for sudoku in sudokus:
-    if correctSudoku(convertToGrid(sudoku)):
-        numCorrect += 1
-
-print(numCorrect, " correct")
-print(len(sudokus) - numCorrect, " incorrect")
+for i in range(len(lines)):
+    if correctSudoku(convertToGrid(lines[i])):
+        print(str(i) + " correct")
+    else:
+        print(str(i) + " incorrect")
