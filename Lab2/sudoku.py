@@ -18,7 +18,9 @@ def correctSudoku(sudoku):
     
     """ rows col """
     for i in range (0, 9):
-        if set(np.reshape(sudoku[i, :], (9))) != correctSet or set(np.reshape(sudoku[:, i], (9))) != correctSet:
+    	rowFalse = set(np.reshape(sudoku[i, :], (9))) != correctSet
+    	colFalse = set(np.reshape(sudoku[:, i], (9))) != correctSet
+        if rowFalse or colFalse:
             return False
     
     """ 3x3 """
