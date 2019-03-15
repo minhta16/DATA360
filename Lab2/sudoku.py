@@ -32,7 +32,7 @@ def correctSudoku(sudoku):
     return True
 
 with open('sudoku_solutions.txt', 'r') as inputFile:
-    lines = [line.rstrip().replace("sudoku: ", "") for line in inputFile]
+    lines = [str.split(line.rstrip(), ": ")[1] for line in inputFile]
 
 for i in range(len(lines)):
     if correctSudoku(convertToGrid(lines[i])):
