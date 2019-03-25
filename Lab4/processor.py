@@ -52,10 +52,56 @@ def cleanData(fullDat):
     
     fullDat.to_csv("augie_athletes_clean.csv")
     print(fullDat.keys())
-    
+ 
+fullDat = pd.read_csv("augie_athletes_clean.csv")
+ 
+# Challenge A
 def feetToInches(height):
     heightSplit = height.split('-')
-    return int(heightSplit[0]) * 12 + int(heightSplit[1])
+    if (len(heightSplit) == 2 and heightSplit[1] != ''):
+        return int(heightSplit[0]) * 12 + int(heightSplit[1])
+    return 0
     
-    return int(height.split())
-fullDat = cleanData(pd.read_csv("augie_athletes.csv"))
+fullDat.Ht.fillna('0', inplace=True)
+fullDat['height_inches'] = fullDat.Ht.apply(feetToInches)
+
+# Challenge B
+print("\n\nTallest athletes: ", fullDat[fullDat['height_inches'] == fullDat['height_inches'].max()])
+"""
+ Comments: The tallest person is in the basketball team and he has been playing for Augie for 2 seasons.
+"""
+
+# Challenge C
+print("\n\nShortest athletes: ", fullDat[fullDat['height_inches'] == fullDat[fullDat['height_inches'] > 0].min()['height_inches']])
+"""
+ Comments: There are 2 shortest athletes, Hilary Kargl and Natalie Rosborough. Hilary played for Lacrosse and Natalie is playing for Volleyball.
+"""
+
+
+# Challenge E
+
+def findBasketball(str):
+    return str.find('Basketball') != -1
+
+import matplotlib.pyplot as plt
+
+hasHtDat = fullDat[fullDat['height_inches'] != 0]
+meanBasket = hasHtDat[hasHtDat['title'].apply(findBasketball)]['height_inches'].mean()
+meanNonBasket = hasHtDat[~hasHtDat['title'].apply(findBasketball)]['height_inches'].mean()
+    
+meanHt = [meanBasket, meanNonBasket]
+x = range(len(meanHt))
+
+fig, ax = plt.subplots()
+plt.bar(x, meanHt)
+plt.xticks(x, ('Basketball', 'Non-Basketball'))
+plt.ylabel('Mean Height')
+plt.xlabel('Player')
+plt.title('Mean Height between Basketball and Non-Basketball Player')
+plt.gca().set_ylim(bottom=68, top=74)
+plt.show()
+
+"""
+ Comments: This graph shows that the average height of basketball players is greater than that of non-Basketball players.
+             To test this thoroughly we need a satistic test though.
+"""
